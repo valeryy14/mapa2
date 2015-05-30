@@ -1,6 +1,6 @@
 <?php
 //print_r($_FILES);
-$ruta ="imagenes/".$_FILES["file"]["name"];//se debe crear ela carpeta "imagenes" dentro del hosting remoto dentro de htdocs
+$ruta ="imagenes/".$_FILES["file"]["name"].".jpg";//se debe crear ela carpeta "imagenes" dentro del hosting remoto dentro de htdocs
 
 if(move_uploaded_file($_FILES["file"]["tmp_name"], $ruta)){
     /*echo "Nombre Tem: ".$_FILES["file"]["tmp_name"]."<br>";

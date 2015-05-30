@@ -48,7 +48,7 @@ $(document).on("pageinit","#Principal", function(e, data){
          });   
          
         $("#btnGuardar").tap(function (){	          
-	    alert("ruta: "+$("#imagen").attr("src"));
+	   // alert("ruta: "+$("#imagen").attr("src"));
 	      if($("#imagen").attr("src")==""){
 		alert("Antes de registrar el servicio debe tomar una fotografía del mismo ");
 	      }else{			
@@ -76,7 +76,7 @@ $(document).on("pageinit","#Principal", function(e, data){
     }
     
  function uploadPhoto(foto) {  
-	alert("si entro: "+foto);
+	//alert("si entro: "+foto);
 	var options = new FileUploadOptions();
 	options.fileKey="file";
 	options.fileName=$("#Nombre").val();
@@ -132,36 +132,30 @@ $(document).on("pageinit","#Principal", function(e, data){
 	  var opciones={maximumAge:500000,enableHighAccuracy:true,timeout:5000};
 	  navigator.geolocation.getCurrentPosition(exito, falla, opciones);
 	  if(navigator.geolocation){	
-	    function exito(posic){	      
-	      /*Aqui se debe realizar la consulta de todos los registros de los servicios
-	         	      
-	      $.ajax(
+	    function exito(posic){	      	      	         	     
+	      $.ajax({
 		type:"POST",
-		url:"consultaServ.php",
-		data:""
+		url:"http://itslmoviles.260mb.net/subirArchivo/consultaServ.php",
+		data:"",
 		success: serviciosConsultados
-	      );
+	      });	     
 	      
 	      function serviciosConsultados(datos){
+	      alert("si entro: "+datos);
 		var respDatos=$.parseJSON(datos); 
-		var nombre, dir, tel, mail, lat, long, ruta;
+		var nombre, dir, tel, mail, lat, lng, ruta;
 		for(var i in respDatos){		 
 		  nombre=respDatos[i].Nombre;//Cambiarlos de acuerdo a los campos de su base de datos
 		  dir=respDatos[i].Direccion;
 		  tel=respDatos[i].Telefono;
 		  mail=respDatos[i].Email;
 		  lat=respDatos[i].Latitud; 
-		  long=respDatos[i].Longitud;
+		  lng=respDatos[i].Longitud;
 		  ruta=respDatos[i].Foto;
-		  dibujarMarcas(nombre, dir, tel, mail, lat, long, ruta);
-	      }*/
-	      var arregloCords=["19.459352, -97.688981","19.464774, -97.687265"];
-	      for(i=0;i<=1; i++){	  
-		  var lat=arregloCords[i].split(",");
-		  dibujarMarcas(defaultPos, lat[0], lat[1]);	    
+		  dibujarMarcas(nombre, dir, tel, mail, lat, lng, ruta);
 	      }
 	    }
-	
+	 }
 	    function falla(error){
 	      alert("Error en el servicio Geolocalizador");
 	      dibujarMarcas(defaultPos);
@@ -173,8 +167,8 @@ $(document).on("pageinit","#Principal", function(e, data){
 	}
 
 
-    //function dibujarMarcas(nombre, dir, tel, mail, lat, long, ruta){//habilitar esta función
-    function dibujarMarcas(defaultPos, lat, lng){
+    function dibujarMarcas(nombre, dir, tel, mail, lat, lng, ruta){//habilitar esta función
+    //function dibujarMarcas(defaultPos, lat, lng){
          var latlng=new google.maps.LatLng(lat,lng);
   	 	  
 	  var marca2=new google.maps.Marker({
@@ -187,7 +181,7 @@ $(document).on("pageinit","#Principal", function(e, data){
 	  var infoVentanta2=new google.maps.InfoWindow({
 	    position:latlng,
 	    //content:"<p>Tu posicion actual es: </p>"+latlng
-	    content:'<div style="width:200px; height:160px;"><div style="text-align: center; color:#5c041b; font-weight:bolder; font-size:12px; font-family:arial;">' + latlng + '</div><img src="images/ajax-loader.gif" width="100" heigth="60" /><div style="text-align:center; color: #2e20b8; font-size:12px; font-family:arial; width:200px; text-align:center;">' + latlng + '</div><div>Tel: ' + latlng + '</div><div>Email:' + latlng + '</div>'
+	    content:'<div style="width:200px; height:160px;"><div style="text-align: center; color:#5c041b; font-weight:bolder; font-size:12px; font-family:arial;">' + nombre + '</div><img src="'+ruta+'" width="100" heigth="60" /><div style="text-align:center; color: #2e20b8; font-size:12px; font-family:arial; width:200px; text-align:center;">' + dir + '</div><div>Tel: ' + tel + '</div><div>Email:' + mail + '</div>'
 	  });
 	  google.maps.event.addListener(marca2, "click", function(){infoVentanta2.open(map,this);});
     }    
