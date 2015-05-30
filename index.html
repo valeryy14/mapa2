@@ -91,7 +91,7 @@ $(document).on("pageinit","#Principal", function(e, data){
 	ft.upload(foto,"http://itslmoviles.260mb.net/subirArchivo/upload.php",function(r){		
 		navigator.notification.confirm("El archivo: "+r.response,null, "Notificacion");
 	}, function(err){
-		navigator.notification.alert("Error: "+err.code+" detalle: "+r.response,null, "Error de Envío");
+		navigator.notification.alert("Error: "+err.code+" detalle: "+err.response,null, "Error de Envío");
 	}, options);
 }
     
