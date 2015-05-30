@@ -47,7 +47,7 @@ $(document).on("pageinit","#Principal", function(e, data){
 	    },{limit:1});            
          });   
          
-        $("#btnGuardar").click(function (){	          
+        $("#btnGuardar").tap(function (){	          
 	    alert("ruta: "+$("#imagen").attr("src"));
 	      if($("#imagen").attr("src")==""){
 		alert("Antes de registrar el servicio debe tomar una fotografía del mismo ");
@@ -241,7 +241,7 @@ text-align:center;
 	  <input type="text" id="Telefono" placeholder="Teléfono" />
 	  <input type="text" id="Email" placeholder="Email" />
 	  <input type="button" id="btnTomarFoto" value="Tomar Foto" >
-	  <div id="regFoto"><img id="imagen2" src="images.jpg" rel="images.jpg" /></div>
+	  <div id="regFoto"><!--img id="imagen2" src="images.jpg" rel="images.jpg" /--></div>
 	  <input type="text" id="obtLatitud" placeholder="Longitud" />
 	  <input type="text" id="obtLongitud" placeholder="Longitud" />
 	  <input type="button" id="obtenercord" value="Obtener coordenadas" />
