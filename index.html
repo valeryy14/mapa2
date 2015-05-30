@@ -67,7 +67,7 @@ $(document).on("pageinit","#Principal", function(e, data){
 		
 		$.ajax({
 		  type:"POST",
-		  url:"guardarServicios.php",
+		  url:"http://itslmoviles.260mb.net/subirArchivo/guardarServicios.php",
 		  data:"nombre="+nom+"&dir="+dir+"&tel="+tel+"&email="+email+"&lat="+lat+"&long="+lon,
 		  success: guardandoServicios		  		
 		});
@@ -81,7 +81,7 @@ $(document).on("pageinit","#Principal", function(e, data){
     }
     
  function uploadPhoto(foto) {  
-	alert("i entro"+foto);
+	alert("si entro"+foto);
 	var options = new FileUploadOptions();
 	options.fileKey="file";
 	options.fileName=$("#Nombre").val();
