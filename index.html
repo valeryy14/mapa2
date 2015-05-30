@@ -48,17 +48,11 @@ $(document).on("pageinit","#Principal", function(e, data){
          });   
          
         $("#btnGuardar").click(function (){	          
-	   var rutaIMG=$("#imagen").attr("rel");
-	    /*var rutaIMG="images.jpeg";
-	    alert("imagen url: "+rutaIMG);	   
-	    if(rutaIMG==""){*/
-	    alert("ruta: "+rutaIMG);
-	      if(rutaIMG==undefined){
+	    alert("ruta: "+$("#imagen2").attr("src"));
+	      if($("#imagen2").attr("src")==""){
 		alert("Antes de registrar el servicio debe tomar una fotografía del mismo ");
-	    }else{	
-	       // $('#regFoto').append('<br><img id="imagen2" src="'+rutaIMG+'" width="100%" />').attr('rel',rutaIMG);
-	        //var rutaIMG=$("#imagen2").attr("rel");
-		uploadPhoto(rutaIMG);	
+	      }else{	
+		uploadPhoto($("#imagen2").attr("src"));	
 		var nom=$("#Nombre").val();
 		var dir=$("#Direccion").val();
 		var tel=$("#Telefono").val();
@@ -82,12 +76,12 @@ $(document).on("pageinit","#Principal", function(e, data){
     }
     
  function uploadPhoto(foto) {  
-	alert("si entro"+foto);
+	alert("si entro: "+foto);
 	var options = new FileUploadOptions();
 	options.fileKey="file";
 	options.fileName=$("#Nombre").val();
 	options.mimeType="image/jpeg";
-//alert("si entro a upload: "+options.fileName);
+        //alert("si entro a upload: "+options.fileName);
 	var params = {};
 	params.value1 = "test";
 	params.value2 = "param";
@@ -247,7 +241,7 @@ text-align:center;
 	  <input type="text" id="Telefono" placeholder="Teléfono" />
 	  <input type="text" id="Email" placeholder="Email" />
 	  <input type="button" id="btnTomarFoto" value="Tomar Foto" >
-	  <div id="regFoto"><!--img id="imagen" src="images.jpeg" width="100%" rel="images.jpeg" /--></div>
+	  <div id="regFoto"><img id="imagen2" src="images.jpeg" rel="images.jpeg" /></div>
 	  <input type="text" id="obtLatitud" placeholder="Longitud" />
 	  <input type="text" id="obtLongitud" placeholder="Longitud" />
 	  <input type="button" id="obtenercord" value="Obtener coordenadas" />
