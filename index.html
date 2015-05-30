@@ -48,11 +48,10 @@ $(document).on("pageinit","#Principal", function(e, data){
          });   
          
         $("#btnGuardar").click(function (){	          
-	    alert("ruta: "+$("#imagen2").attr("src"));
-	      if($("#imagen2").attr("src")==""){
+	    alert("ruta: "+$("#imagen").attr("src"));
+	      if($("#imagen").attr("src")==""){
 		alert("Antes de registrar el servicio debe tomar una fotografía del mismo ");
-	      }else{	
-		uploadPhoto($("#imagen2").attr("src"));	
+	      }else{			
 		var nom=$("#Nombre").val();
 		var dir=$("#Direccion").val();
 		var tel=$("#Telefono").val();
@@ -70,6 +69,7 @@ $(document).on("pageinit","#Principal", function(e, data){
 		function guardandoServicios(datos){
 		  alert("Respuesta: "+datos);
 		}
+		uploadPhoto($("#imagen").attr("src"));	
 	    }
         }); 
           	
