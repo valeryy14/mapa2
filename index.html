@@ -36,7 +36,11 @@ $(document).on("pageinit","#Principal", function(e, data){
 	
 	$("#obtenercord").tap(function(){//Obtener coordenadas para el registro del servicio 
 	  obtenerUbicacion();	    	  
-	});    
+	});
+	$("#acObtenercord").tap(function(){//Obtener coordenadas para el registro del servicio
+	
+	  obtenerUbicacion();	    	  
+	});   
 	
 	$("#btnTomarFoto").tap(function (){//Capturar fotografia
             navigator.device.capture.captureImage(function(mediaFiles){
@@ -47,22 +51,96 @@ $(document).on("pageinit","#Principal", function(e, data){
 	    },{limit:1});            
          });   
          
+	 	 
+	 
+        $("#btnbuscar").tap(function (){	          
+	   var id=$("#acId").val();
+	   
+	      $.ajax({
+                                    type:"POST",
+                                    url:" http://localhostvalery.260mb.net/buscarServicios.php",
+                                    data:"id="+id,
+                                    success: reg_ActuIngre
+                                });
+                                function reg_ActuIngre(datos){
+                                    var json=$.parseJSON(datos);
+				    $("#acNombre").val(json.nombre);
+				    $("#acDireccion").val(json.direccion);
+				    $("#acGiro").val(json.giro);
+				    $("#acObtLatitud").val(json.latitud);
+				    $("#acObtLongitud").val(json.longitud);
+                                }
+        }); 
+          	
+	         $("#btnEditar").tap(function (){	          
+	   // alert("ruta: "+$("#imagen").attr("src"));
+	      if($("#imagen").attr("src")==""){
+		alert("Antes de registrar el servicio debe tomar una fotografía del mismo ");
+	      }else{
+		var id=$("#acId").val();
+		var nom=$("#acNombre").val();
+		var dir=$("#acDireccion").val();
+		var giro=$("#acGiro").val();
+		var lat=$("#acObtLatitud").val();
+		var lon=$("#acObtLongitud").val();
+	
+	
+		$.ajax({
+		  type:"POST",
+		  url:" http://localhostvalery.260mb.net/editarServicios.php",
+		  data:"id="+id+"&nombre="+nom+"&direccion="+dir+"&giro="+giro+"&obtLatitud="+lat+"&obtLongitud="+lon,
+		  success: guardandoServicios		  		
+		});
+		
+		function guardandoServicios(datos){
+		  alert("Respuesta: "+datos);
+		}
+		uploadPhoto($("#imagen").attr("src"));	
+	    }
+        }); 
+	 
+	 
+	      $("#btnEliminar").tap(function (){	          
+	   // alert("ruta: "+$("#imagen").attr("src"));
+	      if($("#imagen").attr("src")==""){
+		alert("Antes de registrar el servicio debe tomar una fotografía del mismo ");
+	      }else{
+		var id=$("#elId").val();
+		
+	
+		$.ajax({
+		  type:"POST",
+		  url:" http://localhostvalery.260mb.net/eliminarServicios.php",
+		  data:"id="+id,
+		  success: eliminandoServicios		  		
+		});
+		
+		function eliminandoServicios(datos){
+		  alert("Respuesta: "+datos);
+		}
+		uploadPhoto($("#imagen").attr("src"));	
+	    }
+        }); 
+	 
+	 
+	 
+	 
         $("#btnGuardar").tap(function (){	          
 	   // alert("ruta: "+$("#imagen").attr("src"));
 	      if($("#imagen").attr("src")==""){
 		alert("Antes de registrar el servicio debe tomar una fotografía del mismo ");
 	      }else{			
-		var nom=$("#Nombre").val();
-		var dir=$("#Direccion").val();
-		var tel=$("#Telefono").val();
-		var email=$("#Email").val();
+		var nom=$("#nombre").val();
+		var dir=$("#direccion").val();
+		var giro=$("#giro").val();
 		var lat=$("#obtLatitud").val();
 		var lon=$("#obtLongitud").val();
-		
+	
+	
 		$.ajax({
 		  type:"POST",
-		  url:"http://itslmoviles.260mb.net/subirArchivo/guardarServicios.php",
-		  data:"nombre="+nom+"&dir="+dir+"&tel="+tel+"&email="+email+"&lat="+lat+"&long="+lon,
+		  url:" http://localhostvalery.260mb.net/guardarServicios.php",
+		  data:"nombre="+nom+"&direccion="+dir+"&giro="+giro+"&obtLatitud="+lat+"&obtLongitud="+lon,
 		  success: guardandoServicios		  		
 		});
 		
@@ -88,7 +166,7 @@ $(document).on("pageinit","#Principal", function(e, data){
 	options.params = params;
 
 	var ft = new FileTransfer();
-	ft.upload(foto,"http://itslmoviles.260mb.net/subirArchivo/upload.php",function(r){		
+	ft.upload(foto," http://localhostvalery.260mb.net/upload.php",function(r){		
 		navigator.notification.confirm("El archivo: "+r.response,null, "Notificacion");
 	}, function(err){
 		navigator.notification.alert("Error: "+err.code+" detalle: "+err.response,null, "Error de Envío");
@@ -104,6 +182,8 @@ $(document).on("pageinit","#Principal", function(e, data){
 	      var corUbic=new google.maps.LatLng(posic.coords.latitude, posic.coords.longitude);
 	      $("#obtLatitud").val(posic.coords.latitude);
 	      $("#obtLongitud").val(posic.coords.longitude);
+	      $("#acObtLatitud").val(posic.coords.latitude);
+	      $("#acObtLongitud").val(posic.coords.longitude);
 	      marca=new google.maps.Marker({
 		  position:corUbic,
 		  map:map,
@@ -120,7 +200,7 @@ $(document).on("pageinit","#Principal", function(e, data){
 	  }
 	
 	  function falla(error){
-	      alert("Error en el servicio Geolocalizador");
+	      alert("Error en el servicio Geolocalizador, compruebe que tiene conexión a internet");
 	  }
 	  	      
 	  }else{
@@ -135,24 +215,23 @@ $(document).on("pageinit","#Principal", function(e, data){
 	    function exito(posic){	      	      	         	     
 	      $.ajax({
 		type:"POST",
-		url:"http://itslmoviles.260mb.net/subirArchivo/consultaServ.php",
+		url:"c http://localhostvalery.260mb.net/onsultaServ.php",
 		data:"",
 		success: serviciosConsultados
 	      });	     
 	      
 	      function serviciosConsultados(datos){
-	      alert("si entro: "+datos);
 		var respDatos=$.parseJSON(datos); 
 		var nombre, dir, tel, mail, lat, lng, ruta;
 		for(var i in respDatos){		 
-		  nombre=respDatos[i].Nombre;//Cambiarlos de acuerdo a los campos de su base de datos
-		  dir=respDatos[i].Direccion;
-		  tel=respDatos[i].Telefono;
-		  mail=respDatos[i].Email;
+
+		  nom=respDatos[i].nombre;//Cambiarlos de acuerdo a los campos de su base de datos
+		  dir=respDatos[i].direccion;
+		  giro=respDatos[i].giro;		
 		  lat=respDatos[i].Latitud; 
 		  lng=respDatos[i].Longitud;
 		  ruta=respDatos[i].Foto;
-		  dibujarMarcas(nombre, dir, tel, mail, lat, lng, ruta);
+		  dibujarMarcas(nombre, dir, giro, lat, lng, ruta);
 	      }
 	    }
 	 }
@@ -167,8 +246,8 @@ $(document).on("pageinit","#Principal", function(e, data){
 	}
 
 
-    function dibujarMarcas(nombre, dir, tel, mail, lat, lng, ruta){//habilitar esta función
-    //function dibujarMarcas(defaultPos, lat, lng){
+    function dibujarMarcas(nombre, dir, giro, lat, lng, ruta){//habilitar esta función
+ 
          var latlng=new google.maps.LatLng(lat,lng);
   	 	  
 	  var marca2=new google.maps.Marker({
@@ -212,10 +291,10 @@ text-align:center;
       <div data-role="content" >  
 	  <ul data-role="listview">
 	    <li data-role="list-divider" style="text-align:center;">Operaciones</li>
-	    <li><a href="#Registrar">Registrar servicios</a></li>
-	    <li><a href="#Consultar">Consultar servicios</a></li>
-	    <li><a href="#Actualizar">Actualizar servicios</a></li>
-	    <li><a href="#Eliminar">Eliminiar servicios</a></li>
+	    <li><a href="#Registrar">Registrar Empresas</a></li>
+	    <li><a href="#Consultar">Consultar Empresas</a></li>
+	    <li><a href="#Actualizar">Actualizar Empresas</a></li>
+	    <li><a href="#Eliminar">Eliminiar Empresa</a></li>
 	  </ul>
       </div>
       <div data-role="footer" data-position="fixed" style="text-align:center;">
@@ -230,11 +309,10 @@ text-align:center;
 	<h1>Registro de Servicios</h1>
       </div>
       <div data-role="content" > 
-	  <input type="text" id="Nombre" placeholder="Nombre del servicio" />
-	  <input type="text" id="Direccion" placeholder="Dirección" />
-	  <input type="text" id="Telefono" placeholder="Teléfono" />
-	  <input type="text" id="Email" placeholder="Email" />
-	  <input type="button" id="btnTomarFoto" value="Tomar Foto" >
+	  <input type="text" id="nombre" placeholder="Nombre de la Empresa" />
+	  <input type="text" id="direccion" placeholder="Dirección" />
+	  <input type="text" id="giro" placeholder="Giro" />
+      	  <input type="button" id="btnTomarFoto" value="Tomar Foto" >
 	  <div id="regFoto"><!--img id="imagen2" src="images.jpg" rel="images.jpg" /--></div>
 	  <input type="text" id="obtLatitud" placeholder="Longitud" />
 	  <input type="text" id="obtLongitud" placeholder="Longitud" />
@@ -248,12 +326,55 @@ text-align:center;
       </div>
 </div>
 
+<div data-role="page" id="Actualizar">
+      <div data-role="header" data-position="fixed">
+	<h1>Editar Servicios</h1>
+      </div>
+      <div data-role="content" > 
+	  <input type="text" id="acId" placeholder="Id de la Empresa" />
+	   <input type="button" id="btnbuscar" value="Buscar Servicio" />
+	  <input type="text" id="acNombre" placeholder="Nombre de la Empresa" />
+	  <input type="text" id="acDireccion" placeholder="Dirección" />
+	  <input type="text" id="acGiro" placeholder="Giro" />
+      	  <input type="button" id="btnTomarFoto" value="Tomar Foto" >
+	  <div id="regFoto"><!--img id="imagen2" src="images.jpg" rel="images.jpg" /--></div>
+	  <input type="text" id="acObtLatitud" placeholder="Latitud" />
+	  <input type="text" id="acObtLongitud" placeholder="Longitud" />
+	  <input type="button" id="acObtenercord" value="Obtener 'nuevas' coordenadas" />
+	  <input type="button" id="btnEditar" value="Editar Servicio" />
+      </div>
+      <div data-role="footer" data-position="fixed" style="text-align:center;">
+	<div data-role="controlgroup" data-type="horizontal">
+	  <a href="#Principal" class="ui-btn ui-icon-home ui-btn-icon-left">Regresar</a>
+	</div>
+      </div>
+</div>
+
+
+<div data-role="page" id="Eliminar">
+      <div data-role="header" data-position="fixed">
+	<h1>Editar Servicios</h1>
+      </div>
+      <div data-role="content" > 
+	  <input type="text" id="elId" placeholder="Id de la Empresa" />
+	  <input type="button" id="btnEliminar" value="Eliminar Servicio" />
+      </div>
+      <div data-role="footer" data-position="fixed" style="text-align:center;">
+	<div data-role="controlgroup" data-type="horizontal">
+	  <a href="#Principal" class="ui-btn ui-icon-home ui-btn-icon-left">Regresar</a>
+	</div>
+      </div>
+</div>
+
+
+
+
 <div data-role="page" id="Consultar" data-url="map-page">
       <div data-role="header" data-position="fixed">
 	<h1>Ubicación de servicios</h1>
       </div>
       <div data-role="content" >  
-	  <div id="map-canvas">Pulse Consultar servicios para identificar su ubicación en el mapa</div>
+	  <div id="map-canvas">Pulse Consultar Empresa para identificar su ubicación en el mapa</div>
       </div>
       <div data-role="footer" data-position="fixed" style="text-align:center;">
 	<div data-role="controlgroup" data-type="horizontal">
